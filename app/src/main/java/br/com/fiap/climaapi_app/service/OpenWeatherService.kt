@@ -16,4 +16,12 @@ interface OpenWeatherService {
         @Query("lang") language: String = "pt_br"
     ): Call<OpenWeather>
 
+    @GET("weather")
+    fun getWeatherByCoordinates(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("units") units: String = "metric",
+        @Query("appid") apiKey: String = "18cad22e69252aa4dd95daa8da20c3f3",
+        @Query("lang") language: String = "pt_br"
+    ): Call<OpenWeather>
 }

@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">Clima API - App</string>
+    <string name="clear_day">
+        1.Piquenique no parque: Reúna seus amigos e familiares, prepare uma cesta cheia de delícias e encontre um local ensolarado em um parque. Desfrute de boa comida, risadas e jogos ao ar livre enquanto aproveita o clima agradável.
+        \n\n2.Trilha na natureza: Seja em uma floresta próxima, em uma trilha de montanha ou até mesmo em um caminho à beira-mar, explore a beleza natural que o rodeia. Respire o ar fresco, ouça os pássaros cantando e deixe-se encantar pela serenidade do ambiente.
+        \n\n3.Passeio de bicicleta: Pegue sua bicicleta e pedale pelas ciclovias da cidade ou por estradas rurais tranquilas. Sinta o vento em seu rosto enquanto você se exercita e desfruta das vistas panorâmicas ao redor.
+        \n\n4.Visita a um jardim botânico: Explore os jardins exuberantes e coloridos de um jardim botânico local. Maravilhe-se com uma variedade de plantas e flores enquanto absorve conhecimento sobre a flora da região.
+        \n\n5.Observação de aves: Leve consigo um par de binóculos e vá para um local onde a vida selvagem seja abundante. Procure por diferentes espécies de aves e tente identificá-las enquanto elas voam pelos céus ou descansam em galhos próximos.
+    </string>
+    <string name="clear_night">
+        1.Observação das estrelas: Encontre um local afastado da poluição luminosa da cidade, estenda uma manta no chão e olhe para cima. Use um aplicativo de astronomia para identificar constelações, planetas e até mesmo a Via Láctea. A noite de céu limpo oferece uma oportunidade incomparável para contemplar a vastidão do universo.
+        \n\n2.Piquenique sob as estrelas: Combine a beleza do céu noturno com uma refeição ao ar livre. Prepare uma cesta com petiscos deliciosos, uma garrafa de vinho ou suco e vá para um local tranquilo. À luz das estrelas, desfrute de uma noite romântica ou divertida com amigos e familiares.
+        \n\n3.Noite de cinema ao ar livre: Muitas comunidades organizam projeções de filmes ao ar livre durante o clima quente. Procure eventos locais ou crie o seu próprio cinema improvisado no quintal. Monte um telão, prepare algumas pipocas e assista a um filme sob o brilho das estrelas.
+        \n\n4.Observação de fenômenos astronômicos: Esteja atento a eventos especiais como chuvas de meteoros, eclipses lunares ou conjunções planetárias. Consulte calendários astronômicos online para saber quando e onde ocorrerão esses fenômenos e prepare-se para uma experiência celestial inesquecível.
+        \n\n5.Fogueira e histórias: Reúna seus amigos em torno de uma fogueira para uma noite de conversas animadas e histórias assustadoras. Enquanto o fogo crepita, compartilhe experiências, lendas locais ou crie suas próprias narrativas para adicionar um toque de mistério à noite estrelada.
+    </string>
+    <string name="clouds">
+        1.Caminhada na natureza: O clima nublado pode oferecer uma atmosfera tranquila e refrescante para uma caminhada na natureza. Escolha uma trilha em uma floresta ou em uma área natural próxima e aproveite o clima mais ameno para explorar a beleza da paisagem.
+        \n\n2.Visita a museus ou galerias de arte: Se o clima não estiver propício para atividades ao ar livre, aproveite para visitar museus, galerias de arte ou exposições culturais. Passe algumas horas apreciando obras de arte, explorando exposições interessantes ou aprendendo sobre história e ciência.
+        \n\n3.Tarde de leitura: Um dia nublado é perfeito para se aconchegar em casa com um bom livro. Prepare uma xícara de chá ou café, encontre um lugar confortável e mergulhe em uma história cativante. Se preferir, visite uma biblioteca local e descubra novos livros para explorar.
+        \n\n4.Cozinhar ou assar: Aproveite o clima mais fresco para passar algum tempo na cozinha experimentando novas receitas ou preparando pratos reconfortantes. Você pode fazer pães caseiros, bolos, sopas ou qualquer outra coisa que desperte sua criatividade culinária.
+        \n\n5.Dia de spa em casa: Transforme um dia nublado em uma experiência relaxante e rejuvenescedora com um dia de spa em casa. Acenda algumas velas, coloque uma música suave e mime-se com tratamentos de beleza, como máscaras faciais, banhos de imersão e massagens.
+    </string>
+    <string name="snow">
+        1.Esqui ou snowboard: Aproveite a neve para praticar esqui ou snowboard em uma estação de esqui próxima. Deslize pelas encostas, sinta o vento gelado no rosto e desfrute da adrenalina de descer as montanhas cobertas de neve.
+        \n\n2.Passeio de trenó ou tobogã: Divirta-se com a família e os amigos em um passeio de trenó ou tobogã em uma colina coberta de neve. Descer as ladeiras em alta velocidade é uma maneira emocionante de aproveitar o clima gelado e criar memórias duradouras.
+        \n\n3.Construção de boneco de neve: Deixe sua criatividade fluir e construa um boneco de neve com a neve fresca. Reúna a família ou os amigos, equipe-se com chapéus, lenços e cenouras e divirta-se criando sua própria obra de arte sazonal.
+        \n\n4.Caminhada na neve: Explore a paisagem branca e tranquila durante uma caminhada na neve. Escolha uma trilha cênica em uma floresta ou parque e aprecie a serenidade do ambiente enquanto caminha sobre a neve macia.
+        \n\n5.Chá ou chocolate quente: Depois de um dia de atividades ao ar livre, aqueça-se com uma xícara de chá ou chocolate quente. Prepare uma bebida reconfortante, relaxe perto da lareira ou debaixo de um cobertor quente e aproveite a sensação de aconchego após um dia na neve.
+    </string>
+    <string name="rain">
+        1.Maratona de filmes em casa: Aproveite o clima aconchegante e chuvoso para uma maratona de filmes em casa. Escolha seus filmes favoritos, prepare pipoca e petiscos e relaxe no sofá enquanto desfruta de uma sessão de cinema caseira.
+        \n\n2.Dia de leitura: Pegue um bom livro ou revista e passe o dia imerso em leituras. Encontre um local confortável, como uma poltrona perto da janela, e deixe-se envolver pelas páginas enquanto o som da chuva cria uma atmosfera relaxante ao seu redor.
+        \n\n3.Cozinhar ou assar: Aproveite o tempo dentro de casa para explorar novas receitas na cozinha. Experimente fazer pratos reconfortantes, como sopa, assados ou bolos caseiros. Cozinhar durante a chuva pode ser uma atividade terapêutica e gratificante.
+        \n\n4.Arte ou artesanato: Dedique algum tempo à criatividade durante um dia chuvoso. Pegue tintas, lápis de cor, argila ou qualquer material que você goste de trabalhar e deixe sua imaginação fluir. Você pode pintar, desenhar, modelar ou fazer qualquer tipo de arte que lhe traga alegria.
+        \n\n5.Spa em casa: Transforme seu lar em um oásis de relaxamento com um dia de spa em casa. Tome um banho quente, faça máscaras faciais, hidrate o corpo e mime-se com uma sessão de cuidados pessoais. A chuva lá fora só aumentará a sensação de conforto e bem-estar.
+    </string>
+    <string name="haze">
+        1.Prática de esportes aquáticos: Aproveite a força do vento para praticar esportes aquáticos, como windsurf, kitesurf ou vela. Encontre uma praia ou lago com condições adequadas e deixe-se levar pela emoção de deslizar sobre as águas impulsionado pelo vento.
+        \n\n2.Voo de pipa: Leve uma pipa para um campo aberto e aproveite o vento para empiná-la no céu. Brinque com diferentes designs de pipas e veja quem consegue mantê-las no ar por mais tempo ou realizar acrobacias impressionantes.
+        \n\n3.Caminhada ou corrida: Aproveite a brisa refrescante para uma caminhada ou corrida ao ar livre. Escolha um local protegido do vento ou ajuste sua rota para aproveitar o impulso extra que o vento pode proporcionar. Lembre-se de vestir roupas adequadas para o clima e proteger-se do frio.
+        \n\n4.Observação de pipas: Procure eventos locais de festival de pipas ou simplesmente observe as pipas coloridas que podem estar voando nos céus em um dia ventoso. É uma atividade divertida e relaxante que pode ser apreciada em família ou com amigos.
+        \n\n5.Fotografia de paisagem: Aproveite as condições atmosféricas únicas proporcionadas pelo vento para capturar imagens impressionantes da paisagem. Fotografe árvores balançando ao vento, ondas quebrando na costa ou até mesmo pessoas lutando contra a brisa, criando composições interessantes e dinâmicas.
+    </string>
 </resources>

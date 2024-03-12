@@ -2,45 +2,38 @@ package br.com.fiap.climaapi_app
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import br.com.fiap.climaapi_app.model.OpenWeather
+import br.com.fiap.climaapi_app.screens.CarregamentoScreen
+import br.com.fiap.climaapi_app.screens.ErroScreen
+import br.com.fiap.climaapi_app.screens.PesquisaScreen
+import br.com.fiap.climaapi_app.screens.PrincipalScreen
+import br.com.fiap.climaapi_app.screens.SugestoesScreen
 import br.com.fiap.climaapi_app.service.RetrofitFactory
 import br.com.fiap.climaapi_app.ui.theme.ClimaAPIAppTheme
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -48,7 +41,7 @@ import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Locale
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +62,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Screen() {
+
+    val navController = rememberNavController()
+
+
     var dataState by remember { mutableStateOf<OpenWeather?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -77,9 +74,9 @@ fun Screen() {
     val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
-    fun fetchData(city: String) {
-        isLoading = true
-        val call = RetrofitFactory().getOpenWeatherService().getWeatherByCity(city)
+    fun fetchDataByCoordinates(latitude: Double, longitude: Double) {
+        val call =
+            RetrofitFactory().getOpenWeatherService().getWeatherByCoordinates(latitude, longitude)
         call.enqueue(object : Callback<OpenWeather> {
             override fun onResponse(
                 call: Call<OpenWeather>,
@@ -107,15 +104,7 @@ fun Screen() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 location?.let {
-                    val geocoder = Geocoder(context, Locale.getDefault())
-                    val addresses: List<Address> =
-                        geocoder.getFromLocation(
-                            location.latitude,
-                            location.longitude,
-                            1
-                        ) as List<Address>
-                    val cityName = addresses[0].locality
-                    fetchData(cityName)
+                    fetchDataByCoordinates(it.latitude, it.longitude)
                 } ?: run {
                     isLoading = false
                     errorMessage = "Localização não disponível"
@@ -126,6 +115,7 @@ fun Screen() {
                 errorMessage = "Erro ao obter localização: ${e.message}"
             }
     }
+
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -156,62 +146,88 @@ fun Screen() {
         checkLocationPermission()
     }
 
+    var color1: Color = colorResource(id = R.color.azul_claro)
+    var color2: Color = colorResource(id = R.color.azul_escuro)
+    var icone: Painter = painterResource(id = R.drawable.sol)
+    var sugestao: String = ""
+
+    fun isDayTime(): Boolean {
+        val cal = Calendar.getInstance()
+        val hour = cal.get(Calendar.HOUR_OF_DAY)
+        return hour >= 6 && hour < 18 // Assume que o dia começa às 6h e termina às 18h
+    }
+
+    val isDay = isDayTime()
+
+    if (dataState?.weather?.firstOrNull()?.main == "Clear") {
+        if (isDay) {
+            color1 = colorResource(id = R.color.azul_claro)
+            color2 = colorResource(id = R.color.azul_escuro)
+            icone = painterResource(id = R.drawable.sol)
+            sugestao = stringResource(id = R.string.clear_day)
+
+        } else {
+            color1 = colorResource(id = R.color.preto)
+            color2 = colorResource(id = R.color.roxo)
+            icone = painterResource(id = R.drawable.lua)
+            sugestao = stringResource(id = R.string.clear_night)
+
+        }
+    } else if (dataState?.weather?.firstOrNull()?.main == "Rain") {
+        color1 = colorResource(id = R.color.cinza)
+        color2 = colorResource(id = R.color.azul_escuro)
+        icone = painterResource(id = R.drawable.chuva)
+        sugestao = stringResource(id = R.string.rain)
+
+    } else if (dataState?.weather?.firstOrNull()?.main == "Snow") {
+        color1 = colorResource(id = R.color.branco)
+        color2 = colorResource(id = R.color.azul_claro)
+        icone = painterResource(id = R.drawable.neve)
+        sugestao = stringResource(id = R.string.snow)
+
+    } else if (dataState?.weather?.firstOrNull()?.main == "Clouds") {
+        color1 = colorResource(id = R.color.branco)
+        color2 = colorResource(id = R.color.cinza)
+        icone = painterResource(id = R.drawable.nuvens)
+        sugestao = stringResource(id = R.string.clouds)
+
+    } else if (dataState?.weather?.firstOrNull()?.main == "Haze") {
+        color1 = colorResource(id = R.color.azul_claro)
+        color2 = colorResource(id = R.color.azul_escuro)
+        icone = painterResource(id = R.drawable.vento)
+        sugestao = stringResource(id = R.string.haze)
+    }
+
     if (isLoading) {
         // Tela de carregamento
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
+        CarregamentoScreen()
     } else {
         // Tela mostrando as informações da API
-        if (errorMessage != null) {
+        errorMessage?.let {
             // Exibir mensagem de erro, se houver
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = errorMessage!!)
-            }
-        } else {
-            // Exibir dados do clima
-            dataState?.let { ScreenWeather(weather = it) }
+            ErroScreen(errorMessage = it)
         }
-    }
-}
-
-
-@Composable
-fun ScreenWeather(weather: OpenWeather) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(30.dp)
-            .background(Color.Magenta)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                IconButton(
-                    onClick = { /*TODO*/ }, modifier = Modifier
-                        .background(Color.White, CircleShape)
-                        .size(30.dp), enabled = false
-                ) {
-                    Icon(Icons.Filled.Search, contentDescription = "invisible")
+            ?: // Exibir dados do clima
+            NavHost(navController = navController, startDestination = "principal") {
+                composable(route = "principal") {
+                    dataState?.let { it1 ->
+                        PrincipalScreen(
+                            weather = it1,
+                            navController,
+                            color1,
+                            color2,
+                            icone,
+                            sugestao,
+                        )
+                    }
                 }
-                weather.weather.firstOrNull()?.description?.let { Text(text = it) }
-                IconButton(
-                    onClick = { /*TODO*/ }, modifier = Modifier
-                        .background(Color.White, CircleShape)
-                        .size(30.dp)
-                ) {
-                    Icon(Icons.Filled.Search, contentDescription = "pesquisa")
+                composable(route = "sugestoes") {
+                    SugestoesScreen(navController, color1, color2, icone, sugestao)
+                }
+                composable(route = "pesquisa") {
+                    PesquisaScreen(navController, color1, color2)
                 }
             }
-        }
     }
 }
 

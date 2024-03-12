@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+<!--    cores para os climas -->
+    <color name="azul_claro">#00D1FF</color>
+    <color name="azul_escuro">#0029FF</color>
+    <color name="preto">#000000</color>
+    <color name="roxo">#7000FF</color>
+    <color name="branco">#D0D0D0</color>
+    <color name="cinza">#3C3C3C</color>
 </resources>
