@@ -5,16 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -22,12 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -50,14 +36,12 @@ fun PrincipalScreen(
     navController: NavController,
     color1: Color,
     color2: Color,
-    icone: Painter,
-    sugestao: String
+    icon: Painter,
+    suggestion: String
 ) {
+    var addressText by remember { mutableStateOf("") }
 
     val context = LocalContext.current
-    var addressText by remember {
-        mutableStateOf("")
-    }
 
     fun getAddressFromLocation(context: Context, latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())
@@ -96,9 +80,11 @@ fun PrincipalScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = { /*TODO*/ }, modifier = Modifier
+                    onClick = {},
+                    modifier = Modifier
                         .background(Color.Transparent, CircleShape)
-                        .size(46.dp), enabled = false
+                        .size(46.dp),
+                    enabled = false
                 ) {
                     Icon(
                         Icons.Filled.Search,
@@ -106,11 +92,15 @@ fun PrincipalScreen(
                         tint = Color.Transparent
                     )
                 }
-                Text(text = addressText, fontSize = 32.sp, fontWeight = FontWeight.Bold, style = TextStyle(color = Color.White))
+                Text(
+                    text = addressText,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(color = Color.White)
+                )
                 IconButton(
-                    onClick = {
-                              navController.navigate("pesquisa")
-                    }, modifier = Modifier
+                    onClick = { navController.navigate("pesquisa") },
+                    modifier = Modifier
                         .background(Color.White, CircleShape)
                         .size(46.dp)
                 ) {
@@ -127,8 +117,9 @@ fun PrincipalScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     weather.weather.firstOrNull()?.description?.let {
+                        val capitalizedWeather = it.capitalize()
                         Text(
-                            text = it,
+                            text = capitalizedWeather,
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
                             style = TextStyle(color = Color.White)
@@ -136,13 +127,13 @@ fun PrincipalScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Image(
-                        painter = icone,
+                        painter = icon,
                         contentDescription = "icone do clima",
                         modifier = Modifier.size(200.dp)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = weather.main.temp.toString() + "°C",
+                        text = "${weather.main.temp}°C",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         style = TextStyle(color = Color.White)
@@ -153,16 +144,14 @@ fun PrincipalScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = sugestao.take(100) + "...",
+                        text = suggestion.take(100) + "...",
                         modifier = Modifier.fillMaxWidth(),
                         fontSize = 16.sp,
                         style = TextStyle(color = Color.White)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     TextButton(
-                        onClick = {
-                                  navController.navigate("sugestoes")
-                        },
+                        onClick = { navController.navigate("sugestoes") },
                         modifier = Modifier.background(Color.Transparent)
                     ) {
                         Text(

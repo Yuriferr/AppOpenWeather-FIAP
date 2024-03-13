@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -52,7 +51,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ClimaAPIAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -64,7 +62,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun Screen() {
     val navController = rememberAnimatedNavController()
@@ -149,107 +147,100 @@ fun Screen() {
         checkLocationPermission()
     }
 
-    var color1: Color = colorResource(id = R.color.azul_claro)
-    var color2: Color = colorResource(id = R.color.azul_escuro)
-    var icone: Painter = painterResource(id = R.drawable.sol)
-    var sugestao: String = ""
-
-    fun isDayTime(): Boolean {
-        val cal = Calendar.getInstance()
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        return hour >= 6 && hour < 18 // Assume que o dia começa às 6h e termina às 18h
-    }
+    var color1 by remember { mutableStateOf(Color.White) }
+    var color2 by remember { mutableStateOf(Color.White) }
+    var icone = painterResource(id = R.drawable.sol)
+    var sugestao by remember { mutableStateOf("") }
 
     val isDay = isDayTime()
 
-    if (dataState?.weather?.firstOrNull()?.main == "Clear") {
-        if (isDay) {
-            color1 = colorResource(id = R.color.azul_claro)
-            color2 = colorResource(id = R.color.azul_escuro)
-            icone = painterResource(id = R.drawable.sol)
-            sugestao = stringResource(id = R.string.clear_day)
-
-        } else {
-            color1 = colorResource(id = R.color.preto)
-            color2 = colorResource(id = R.color.roxo)
-            icone = painterResource(id = R.drawable.lua)
-            sugestao = stringResource(id = R.string.clear_night)
-
+    dataState?.weather?.firstOrNull()?.let { weather ->
+        when (weather.main) {
+            "Clear" -> {
+                if (isDay) {
+                    color1 = colorResource(id = R.color.azul_claro)
+                    color2 = colorResource(id = R.color.azul_escuro)
+                    icone = painterResource(id = R.drawable.sol)
+                    sugestao = stringResource(id = R.string.clear_day)
+                } else {
+                    color1 = colorResource(id = R.color.preto)
+                    color2 = colorResource(id = R.color.roxo)
+                    icone = painterResource(id = R.drawable.lua)
+                    sugestao = stringResource(id = R.string.clear_night)
+                }
+            }
+            "Rain" -> {
+                color1 = colorResource(id = R.color.cinza)
+                color2 = colorResource(id = R.color.azul_escuro)
+                icone = painterResource(id = R.drawable.chuva)
+                sugestao = stringResource(id = R.string.rain)
+            }
+            "Snow" -> {
+                color1 = colorResource(id = R.color.branco)
+                color2 = colorResource(id = R.color.azul_claro)
+                icone = painterResource(id = R.drawable.neve)
+                sugestao = stringResource(id = R.string.snow)
+            }
+            "Clouds" -> {
+                color1 = colorResource(id = R.color.branco)
+                color2 = colorResource(id = R.color.cinza)
+                icone = painterResource(id = R.drawable.nuvens)
+                sugestao = stringResource(id = R.string.clouds)
+            }
+            "Haze" -> {
+                color1 = colorResource(id = R.color.azul_claro)
+                color2 = colorResource(id = R.color.azul_escuro)
+                icone = painterResource(id = R.drawable.vento)
+                sugestao = stringResource(id = R.string.haze)
+            }
         }
-    } else if (dataState?.weather?.firstOrNull()?.main == "Rain") {
-        color1 = colorResource(id = R.color.cinza)
-        color2 = colorResource(id = R.color.azul_escuro)
-        icone = painterResource(id = R.drawable.chuva)
-        sugestao = stringResource(id = R.string.rain)
-
-    } else if (dataState?.weather?.firstOrNull()?.main == "Snow") {
-        color1 = colorResource(id = R.color.branco)
-        color2 = colorResource(id = R.color.azul_claro)
-        icone = painterResource(id = R.drawable.neve)
-        sugestao = stringResource(id = R.string.snow)
-
-    } else if (dataState?.weather?.firstOrNull()?.main == "Clouds") {
-        color1 = colorResource(id = R.color.branco)
-        color2 = colorResource(id = R.color.cinza)
-        icone = painterResource(id = R.drawable.nuvens)
-        sugestao = stringResource(id = R.string.clouds)
-
-    } else if (dataState?.weather?.firstOrNull()?.main == "Haze") {
-        color1 = colorResource(id = R.color.azul_claro)
-        color2 = colorResource(id = R.color.azul_escuro)
-        icone = painterResource(id = R.drawable.vento)
-        sugestao = stringResource(id = R.string.haze)
     }
 
     if (isLoading) {
-        // Tela de carregamento
         CarregamentoScreen()
     } else {
-        // Tela mostrando as informações da API
         errorMessage?.let {
-            // Exibir mensagem de erro, se houver
             ErroScreen(errorMessage = it)
-        }
-            ?: // Exibir dados do clima
-            AnimatedNavHost(
-                navController = navController,
-                startDestination = "principal",
-                exitTransition = {
-                    slideOutOfContainer(
-                        towards = AnimatedContentScope.SlideDirection.End,
-                        animationSpec = tween(1000)
-                    ) + fadeOut(animationSpec = tween(1000))
-                },
-                enterTransition = {
-                    slideIntoContainer(
-                        towards = AnimatedContentScope.SlideDirection.Start,
-                        animationSpec = tween(500)
+        } ?: AnimatedNavHost(
+            navController = navController,
+            startDestination = "principal",
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentScope.SlideDirection.End,
+                    animationSpec = tween(1000)
+                ) + fadeOut(animationSpec = tween(1000))
+            },
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentScope.SlideDirection.Start,
+                    animationSpec = tween(500)
+                )
+            }
+        ) {
+            composable(route = "principal") {
+                dataState?.let {
+                    PrincipalScreen(
+                        weather = it,
+                        navController,
+                        color1,
+                        color2,
+                        icone,
+                        sugestao,
                     )
                 }
-            ) {
-                composable(route = "principal") {
-                    dataState?.let { it1 ->
-                        PrincipalScreen(
-                            weather = it1,
-                            navController,
-                            color1,
-                            color2,
-                            icone,
-                            sugestao,
-                        )
-                    }
-                }
-                composable(route = "sugestoes") {
-                    SugestoesScreen(navController, color1, color2, icone, sugestao)
-                }
-                composable(route = "pesquisa") {
-                    PesquisaScreen(navController, color1, color2)
-                }
             }
+            composable(route = "sugestoes") {
+                SugestoesScreen(navController, color1, color2, icone, sugestao)
+            }
+            composable(route = "pesquisa") {
+                PesquisaScreen(navController, color1, color2)
+            }
+        }
     }
 }
 
-
-
-
-
+fun isDayTime(): Boolean {
+    val cal = Calendar.getInstance()
+    val hour = cal.get(Calendar.HOUR_OF_DAY)
+    return hour >= 6 && hour < 18 // Assume que o dia começa às 6h e termina às 18h
+}

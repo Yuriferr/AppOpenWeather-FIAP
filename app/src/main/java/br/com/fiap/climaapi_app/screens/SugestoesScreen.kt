@@ -2,17 +2,7 @@ package br.com.fiap.climaapi_app.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -38,8 +28,8 @@ fun SugestoesScreen(
     navController: NavController,
     color1: Color,
     color2: Color,
-    icone: Painter,
-    sugestao: String,
+    icon: Painter,
+    suggestion: String,
 ) {
     Box(
         modifier = Modifier
@@ -84,9 +74,9 @@ fun SugestoesScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                Image(painter = icone, contentDescription = "icone do clima")
+                Image(painter = icon, contentDescription = "icone do clima")
                 Spacer(modifier = Modifier.height(36.dp))
-                Text(text = sugestao, style = TextStyle(color = Color.White), fontSize = 18.sp)
+                Text(text = suggestion, style = TextStyle(color = Color.White), fontSize = 18.sp)
             }
         }
     }
