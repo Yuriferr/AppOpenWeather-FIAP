@@ -8,6 +8,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,9 +29,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import br.com.fiap.climaapi_app.model.OpenWeather
 import br.com.fiap.climaapi_app.screens.CarregamentoScreen
 import br.com.fiap.climaapi_app.screens.ErroScreen
@@ -36,6 +37,9 @@ import br.com.fiap.climaapi_app.screens.PrincipalScreen
 import br.com.fiap.climaapi_app.screens.SugestoesScreen
 import br.com.fiap.climaapi_app.service.RetrofitFactory
 import br.com.fiap.climaapi_app.ui.theme.ClimaAPIAppTheme
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
@@ -60,11 +64,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Screen() {
-
-    val navController = rememberNavController()
-
+    val navController = rememberAnimatedNavController()
 
     var dataState by remember { mutableStateOf<OpenWeather?>(null) }
     var isLoading by remember { mutableStateOf(false) }
@@ -208,7 +211,22 @@ fun Screen() {
             ErroScreen(errorMessage = it)
         }
             ?: // Exibir dados do clima
-            NavHost(navController = navController, startDestination = "principal") {
+            AnimatedNavHost(
+                navController = navController,
+                startDestination = "principal",
+                exitTransition = {
+                    slideOutOfContainer(
+                        towards = AnimatedContentScope.SlideDirection.End,
+                        animationSpec = tween(1000)
+                    ) + fadeOut(animationSpec = tween(1000))
+                },
+                enterTransition = {
+                    slideIntoContainer(
+                        towards = AnimatedContentScope.SlideDirection.Start,
+                        animationSpec = tween(500)
+                    )
+                }
+            ) {
                 composable(route = "principal") {
                     dataState?.let { it1 ->
                         PrincipalScreen(
